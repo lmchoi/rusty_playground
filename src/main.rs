@@ -17,33 +17,45 @@
 
 //     1 <= k <= (nums.length + 1) // 2
 
+fn _split_adjacents(chunk: &[(usize, &i32)]) -> Vec<Vec<i32>> {
+    return vec![vec![]];
+}
+
+fn get_value_at(chunk: &[(usize, &i32)], i: usize) -> i32 {
+    chunk
+        .iter()
+        .find_map(|&(index, &value)| (index == i).then_some(value))
+        .unwrap_or(0)
+}
+
 // Follow-up: Can you solve it in O(nk) time with O(nk) space?
 fn max_sum_of_subseq(nums: &[i32], k: usize) -> i32 {
     if nums.len() < k {
-        return -1
+        return -1;
     }
 
     let mut indexed: Vec<_> = nums.iter().enumerate().collect();
-    indexed.sort_by_key(|&(_idx, & val)| std::cmp::Reverse(val));
+    indexed.sort_by_key(|&(_idx, &val)| std::cmp::Reverse(val));
 
-    for i in 0..nums.len() - k {
-        if let Some(chunk)= indexed.get(i..i+k) {
-            
-            
+    if let Some(chunk) = indexed.get(0..k) {
+        let total: i32 = chunk.iter().map(|&(_idx, val)| val).sum();
 
-            let sum: i32 = chunk.iter().map(|&(_k, v)| v).sum();
-            return sum;
-        }
+        let ii = chunk.get(0).unwrap().0;
+
+        let left_value = get_value_at(chunk, ii - 1);
+        let right_value = get_value_at(chunk, ii + 1);
+
+        // get replacement value(s)
+
+        return total - left_value - right_value;
     }
 
-    return 0
+    return 0;
 }
 
-// day 1
-// start: 9:46
-// pause: 10:24
-// resume: 10:55
-// pause: 11:59
+// day 2
+// start: 6:57
+// end: 8:04
 fn main() {
     println!("Hello, world!");
 }
